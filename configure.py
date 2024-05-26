@@ -24,6 +24,8 @@ class File:
         else:
             self.cmems_data = (self.cmems_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] +
                                '_' + self.end_date[:4] + '.nc')
+
+        self.download_set()
         return
 
     def download_set(self):
