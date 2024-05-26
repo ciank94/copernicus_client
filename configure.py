@@ -3,8 +3,8 @@ import copernicusmarine as cop
 
 class File:
 
-    def __init__(self, cmems_path, data_id, y1, y2):
-        self.case = "test_"
+    def __init__(self, outfile_path, config_path, data_id, y1, y2):
+        self.case = "full_"
         self.month_end = None
         self.month_start = None
         self.config_duration()  # Uses case to specify start and end dataes extracted from cmems
@@ -15,14 +15,15 @@ class File:
         self.min_lat = -73
         self.max_lat = -50
         self.data_id = data_id
-        self.cmems_path = cmems_path
+        self.config_path = config_path
+        self.outfile_path = outfile_path
         self.start_date = y1 + self.month_start
         self.end_date = y2 + self.month_end
         self.var = ["uo", "vo"]
         if y1 == y2:
-            self.cmems_file = (self.cmems_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] + '.nc')
+            self.outfile = (self.outfile_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] + '.nc')
         else:
-            self.cmems_file = (self.cmems_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] +
+            self.outfile = (self.outfile_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] +
                                '_' + self.end_date[:4] + '.nc')
 
         self.download_set()
@@ -31,7 +32,7 @@ class File:
     def download_set(self):
         print(" ##################### ")
         print("Preparing to download dataset")
-        print("filename = " + self.cmems_file)
+        print("filename = " + self.outfile)
         print(" ##################### ")
         cop.subset(dataset_id=self.data_id,
                    variables= self.var,
@@ -43,9 +44,9 @@ class File:
                    maximum_latitude=self.max_lat,
                    minimum_depth=self.min_depth,
                    maximum_depth=self.max_depth,
-                   output_filename=self.cmems_file,
-                   output_directory=self.cmems_path,
-                   credentials_file=self.cmems_path + ".copernicusmarine-credentials",
+                   output_filename=self.outfile,
+                   output_directory=self.outfile_path,
+                   credentials_file=self.config_path + ".copernicusmarine-credentials",
                    force_download=True
                    )
         return
