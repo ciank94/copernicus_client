@@ -4,7 +4,7 @@ import copernicusmarine as cop
 class File:
 
     def __init__(self, cmems_path, data_id, y1, y2):
-        self.case = "norm_"
+        self.case = "test_"
         self.month_end = None
         self.month_start = None
         self.config_duration()  # Uses case to specify start and end dataes extracted from cmems
@@ -20,16 +20,19 @@ class File:
         self.end_date = y2 + self.month_end
         self.var = ["uo", "vo"]
         if y1 == y2:
-            self.cmems_data = (self.cmems_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] + '.nc')
+            self.cmems_file = (self.cmems_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] + '.nc')
         else:
-            self.cmems_data = (self.cmems_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] +
+            self.cmems_file = (self.cmems_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] +
                                '_' + self.end_date[:4] + '.nc')
 
         self.download_set()
         return
 
     def download_set(self):
-
+        print(" ##################### ")
+        print("Preparing to download dataset")
+        print("filename = " + self.cmems_file)
+        print(" ##################### ")
         cop.subset(dataset_id=self.data_id,
                    variables= self.var,
                    start_datetime=self.start_date,
@@ -40,8 +43,10 @@ class File:
                    maximum_latitude=self.max_lat,
                    minimum_depth=self.min_depth,
                    maximum_depth=self.max_depth,
-                   output_filename=self.cmems_data,
-                   output_directory=self.cmems_path
+                   output_filename=self.cmems_file,
+                   output_directory=self.cmems_path,
+                   credentials_file=self.cmems_path + ".copernicusmarine-credentials",
+                   force_download=True
                    )
         return
 
@@ -50,6 +55,12 @@ class File:
             print("DOWNLOADING: Case SG_short")
             month_start = "-05-01"
             month_end = "-09-30"
+        elif self.case == "test_":
+            self.min_depth = 0
+            self.max_depth = 1
+            month_start = "-05-01"
+            month_end = "-05-10"
+            print("DOWNLOADING test file")
         else:
             print("DOWNLOADING standard file")
             month_start = "-01-01"
