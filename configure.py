@@ -1,31 +1,36 @@
 import copernicusmarine as cop
+import sys
 
 
 class File:
 
-    def __init__(self, outfile_path, config_path, data_id, y1, y2):
+    def __init__(self, outfile_path, config_path, key, y):
         self.case = "full_"
         self.month_end = None
         self.month_start = None
         self.config_duration()  # Uses case to specify start and end dataes extracted from cmems
-        self.min_depth = 40
-        self.max_depth = 80
+        self.min_depth = 70
+        self.max_depth = 100
         self.min_lon = -70
         self.max_lon = -31
         self.min_lat = -73
         self.max_lat = -50
-        self.data_id = data_id
         self.config_path = config_path
         self.outfile_path = outfile_path
-        self.start_date = y1 + self.month_start
-        self.end_date = y2 + self.month_end
-        self.var = ["uo", "vo"]
-        if y1 == y2:
-            self.outfile = (self.outfile_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] + '.nc')
+        self.start_date = y + self.month_start
+        self.end_date = y + self.month_end
+        if key == 'DPHY':
+            save_key = 'CMEMS_GLPHYS_D_'
+            self.data_id = 'cmems_mod_glo_phy_my_0.083deg_P1D-m'
+            self.var = ["uo", "vo", "thetao"]
+        elif key == 'DBIO':
+            save_key = 'CMEMS_GLBIO_D_'
+            self.data_id = 'cmems_mod_glo_bgc_my_0.25deg_P1D-m'
+            self.var = ["chl", "o2"]
         else:
-            self.outfile = (self.outfile_path + 'CMEMS_GLPHYS_D_' + self.case + self.start_date[:4] +
-                               '_' + self.end_date[:4] + '.nc')
-
+            sys.exit("Invalid key for downloading file")
+            
+        self.outfile = (self.outfile_path + save_key + self.case + self.start_date[:4] + '.nc')
         self.download_set()
         return
 
