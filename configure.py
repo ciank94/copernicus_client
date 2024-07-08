@@ -19,6 +19,7 @@ class File:
         self.outfile_path = outfile_path
         self.start_date = y + self.month_start
         self.end_date = y + self.month_end
+
         if key == 'DPHY':
             save_key = 'CMEMS_GLPHYS_D_'
             self.data_id = 'cmems_mod_glo_phy_my_0.083deg_P1D-m'
@@ -27,9 +28,22 @@ class File:
             save_key = 'CMEMS_GLBIO_D_'
             self.data_id = 'cmems_mod_glo_bgc_my_0.25deg_P1D-m'
             self.var = ["chl", "o2"]
+        elif key == 'TEMP':
+            save_key = 'CMEMS_TEMP_'
+            self.data_id = 'cmems_mod_glo_bgc_my_0.25deg_P1D-m'
+            self.var = ["uo", "vo", "thetao"]
+            self.min_lon = -41
+            self.max_lon = -32
+            self.min_lat = -56
+            self.max_lat = -51
+            y1 = str(2006)
+            y2 = str(2021)
+            self.start_date = y1 + self.month_start
+            self.end_date = y2 + self.month_end
         else:
             sys.exit("Invalid key for downloading file")
-            
+
+
         self.outfile = (self.outfile_path + save_key + self.case + self.start_date[:4] + '.nc')
         self.download_set()
         return
