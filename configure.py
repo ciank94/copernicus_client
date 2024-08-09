@@ -9,8 +9,8 @@ class File:
         self.month_end = None
         self.month_start = None
         self.config_duration()  # Uses case to specify start and end dataes extracted from cmems
-        self.min_depth = 70
-        self.max_depth = 100
+        self.min_depth = 50
+        self.max_depth = 200
         self.min_lon = -70
         self.max_lon = -31
         self.min_lat = -73
@@ -29,17 +29,19 @@ class File:
             self.data_id = 'cmems_mod_glo_bgc_my_0.25deg_P1D-m'
             self.var = ["chl", "o2"]
         elif key == 'TEMP':
-            save_key = 'CMEMS_TEMP_'
-            self.data_id = 'cmems_mod_glo_bgc_my_0.25deg_P1D-m'
-            self.var = ["uo", "vo", "thetao"]
+            save_key = 'CMEMS_TEMP_SG'
+            self.data_id = 'cmems_mod_glo_phy_my_0.083deg_P1D-m'
+            self.var = ["thetao"]
             self.min_lon = -41
             self.max_lon = -32
             self.min_lat = -56
             self.max_lat = -51
             y1 = str(2006)
-            y2 = str(2021)
-            self.start_date = y1 + self.month_start
-            self.end_date = y2 + self.month_end
+            y2 = str(2020)
+            month_start = "-06-01"
+            month_end = "-09-30"
+            self.start_date = y1 + month_start
+            self.end_date = y2 + month_end
         else:
             sys.exit("Invalid key for downloading file")
 
